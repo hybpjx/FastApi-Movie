@@ -1,13 +1,14 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from tortoise.contrib.fastapi import HTTPNotFoundError
 
+from backend.core.deps import get_current_user
 from backend.models import Movie
 from backend.schemas import Movie_Pydantic, MovieIn_Pydantic
 
-movie = APIRouter(tags=['电影相关'])
+movie = APIRouter(tags=['电影相关'],dependencies=[Depends(get_current_user)])
 
 
 class Status(BaseModel):

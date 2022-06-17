@@ -18,7 +18,7 @@ class Users(models.Model):
             force_create: bool = False,
             force_update: bool = False,
     ) -> None:
-        await super(Users, self).save(using_db, update_fields, force_create, force_update)
-        if force_create or "password" in update_fields:
-            self.password = get_password_hash(password=self.password)
+        if force_create or 'password' in update_fields:
+            self.password = get_password_hash(self.password)
 
+        await super(Users, self).save(using_db, update_fields, force_create, force_update)

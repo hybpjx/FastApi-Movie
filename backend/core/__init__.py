@@ -1,1 +1,1 @@
-from .security import get_password_hash,verify_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
+from .security import get_password_hash, verify_password, create_access_token, settings
