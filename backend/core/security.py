@@ -6,9 +6,7 @@ from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-
-from backend.core.config import settings
-
+from core import config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/login")
@@ -49,7 +47,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
         # 如果没传 +15 分钟
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, config.core_settings.SECRET_KEY, algorithm=config.core_settings.ALGORITHM)
     return encoded_jwt
 
 

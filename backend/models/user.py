@@ -1,7 +1,7 @@
 from typing import Optional, Iterable
 
 from tortoise import fields, models, BaseDBAsyncClient
-from backend.core import get_password_hash
+from core import get_password_hash
 
 class Users(models.Model):
     """

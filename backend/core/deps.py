@@ -1,12 +1,13 @@
 from fastapi import Depends, HTTPException
 from jose import jwt, JWTError
 from starlette import status
+from fastapi.requests import Request
 
-from backend.core import settings
-from backend.core.security import oauth2_scheme
-from backend.models import Users
+from core import config
+from core.security import oauth2_scheme
+from models import Users
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(request:Request,token: str = Depends(oauth2_scheme)):
     """
     oauth2_scheme 从请求头中取得Authorization 从而解析token
     :param token: 解析token 获取当前对象
@@ -18,7 +19,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, config.core_settings.SECRET_KEY, algorithms=[config.core_settings.ALGORITHM])
         # 字典取值 取值取不到 就返回空
         username: str = payload.get("sub",None)
         if username is None:
@@ -27,6 +28,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credentials_exception
     user = await Users.get(username=username)
+
+    # redis 操作
+    if await request.state.redis.get(user.username) is None:
+        raise HTTPException(detail="数据已经失效",status_code=status.HTTP_408_REQUEST_TIMEOUT)
+
+
     if user is None:
         raise credentials_exception
     return user

@@ -1,0 +1,15 @@
+\<script>
+import Layout from  "./components/Layout.vue";
+</script>
+
+<template>
+  <Layout></Layout>
+</template>
+
+
+
+
+
+<style>
+
+</style>

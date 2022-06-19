@@ -1,5 +1,5 @@
 from uvicorn import run
-from backend.api import app
+from api import app
 
 
 

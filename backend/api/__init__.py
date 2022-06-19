@@ -1,14 +1,17 @@
 import sys
+from fastapi.middleware.cors import CORSMiddleware
+import aioredis as aioredis
+from aioredis import Redis
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi import FastAPI, applications
 from tortoise.contrib.fastapi import register_tortoise
 
 from .v1 import v1
-from backend.core.config import settings
+from core import config
 
 app = FastAPI(
-    description=settings.DESC,
-    title=settings.TITLE,
+    description=config.core_settings.DESC,
+    title=config.core_settings.TITLE,
 )
 
 app.include_router(v1, prefix="/api")
@@ -47,7 +50,32 @@ logger_tortoise.addHandler(sh)
 register_tortoise(
     app,  # fastapi 的实例
     db_url="sqlite://watch.sqlite",  # 数据库
-    modules={"models": ["backend.models"]},
+    modules={"models": ["models"]},
     generate_schemas=True,
     add_exception_handlers=True,
+)
+
+# 可以不要
+@app.on_event("startup")
+async def startup():
+    """aioredis"""
+
+    app.state.redis: Redis = await aioredis.create_redis("redis://127.0.0.1:6379")
+
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    """close redis"""
+    await app.state.redis.close()
+
+
+# core跨域
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=config.core_settings.ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )

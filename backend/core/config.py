@@ -16,5 +16,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 3
 
+    ORIGINS = [
+        "http://localhost.com:3000",
+        "https://127.0.0.1:3000",
+        "http://localhost",
+        "http://localhost:5000",
+    ]
 
-settings = Settings()
+
+core_settings = Settings()
