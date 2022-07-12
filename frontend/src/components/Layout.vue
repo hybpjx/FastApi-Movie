@@ -1,3 +1,16 @@
+<script setup>
+
+import {ref} from "vue"
+import Header from "./Header.vue";
+import Footer from "./Footer.vue";
+
+const isLogin = ref(false) // 默认未登录
+
+
+</script>
+
+
+
 <template xmlns="http://www.w3.org/1999/html">
 
   <div class="common-layout">
@@ -7,47 +20,22 @@
         WatchList(fastapi)
       </h2>
 
-    <Header />
-      <Header></Header>
+      <el-header>
 
-
-      <p>
-        8 TOTAL
-      </p>
+        <Header />
+      </el-header>
 
       <el-main>
-        <ul class="movie-list">
-          <li v-for="i in 8">
-            Dead Poets Society-1991
-
-            <span class="float-right">
-
-              <template v-if="!IsLogin">
-                <el-button size="small">edit</el-button>
-                <el-button size="small">delete</el-button>
-              </template>
-
-              <a class="imdb" href="https://www.imdb.com/find?q=Dead Poets Society" target="_blank">IMDB</a>
-            </span>
-          </li>
-        </ul>
-
+        <router-view></router-view>
       </el-main>
 
-      <img src="@/assets/images/totoro.gif" class="dudu" alt=""/>
+
 
       <el-footer>
+        <img src="@/assets/images/totoro.gif" class="dudu" alt=""/>
 
-         <span>© 2021
-        <a href="#">
-          HelloFlask
-        </a>
-         </span>
-        <p>
-          <a>
-            使用FastAPI + Vue3 翻抄 HelloFlask一书中的项目
-          </a>
-        </p>
+        <Footer />
+
       </el-footer>
     </el-container>
 
@@ -55,22 +43,19 @@
 </template>
 
 
-<script>
-export default {
-  name: "Layout",
-  components:"Header"
-}
-
-import Header from "./Header.vue";
-
-import {ref} from "vue"
-
-const IsLogin = ref(false) // 默认未登录
-
-
-</script>
 
 <style scoped>
+.el-header{
+  height: 32px;
+  background-color: black;
+  line-height: 32px;
+  text-align: center;
+  padding: 0 !important;
+}
+
+.el-main {
+  padding: 0 3px 0 3px !important;
+}
 
 .el-footer {
   color: #888;
@@ -79,51 +64,10 @@ const IsLogin = ref(false) // 默认未登录
   padding: 10px;
 }
 
-.el-main {
-  padding: 0 3px 0 3px !important;
-}
-
-.movie-list {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-}
-
-.movie-list li {
-  padding: 12px 24px;
-  border-bottom: 1px solid #ddd;
-}
-
-.imdb {
-  font-size: 12px;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
-  background: #f5c518;
-  border-radius: 5px;
-  padding: 3px 5px;
-}
-
-.float-right {
-  float: right;
-}
-
 .dudu {
   display: block;
   margin: 0 auto;
   height: 100px;
-}
-
-.el-button {
-  font-size: 12px !important;
-  padding: 3px 5px !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
-  background-color: white !important;
-  color: black !important;
-  border: 1px solid #555555 !important;
-  border-radius: 5px !important;
 }
 
 </style>
